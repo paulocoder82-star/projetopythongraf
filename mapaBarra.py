@@ -3,27 +3,33 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 # 1. Carregar os dados
-# Se o seu arquivo não tiver cabeçalho na primeira coluna, o pandas pode se confundir.
-# Mas baseando no seu arquivo, a primeira coluna parece ser o 'Customer_Segment' ou 'Type'
 df = pd.read_csv('wine.csv')
 
-# Vamos nomear a primeira coluna de 'Tipo' caso ela não tenha nome
-df.rename(columns={df.columns[0]: 'Tipo_Vinho'}, inplace=True)
+# --- CORREÇÃO DO ERRO ---
+# Remove espaços em branco que podem estar escondidos nos nomes das colunas
+df.columns = df.columns.str.strip()
 
-# 2. Criar o gráfico de barras (Média de Álcool por Tipo)
-plt.figure(figsize=(8, 6))
-sns.barplot(data=df, x='Tipo_Vinho', y='Alcohol', estimator='mean', hue='Tipo_Vinho', legend=False)
+# Se a primeira coluna virou 'index' ou não tem nome, vamos dar um nome a ela
+# No seu caso, a primeira coluna é a 'Classe' do vinho
+df = df.reset_index()
+df.rename(columns={df.columns[0]: 'Classe_Vinho', 'index': 'Classe_Vinho'}, inplace=True)
+
+# Vamos imprimir os nomes reais das colunas para você conferir no terminal
+print("Colunas detectadas:", df.columns.tolist())
+
+# 2. Criar o gráfico
+plt.figure(figsize=(10, 6))
+
+# Usando o nome da coluna que limpamos acima
+sns.barplot(data=df, x='Classe_Vinho', y='Alcohol', hue='Classe_Vinho', palette='viridis', legend=False)
 
 # 3. Personalizar
-plt.title('Média de Teor Alcoólico por Tipo de Vinho', fontsize=14)
-plt.xlabel('Tipo de Vinho', fontsize=12)
-plt.ylabel('Média de Álcool', fontsize=12)
+plt.title('Média de Álcool por Classe de Vinho', fontsize=14)
+plt.xlabel('Classe do Vinho (Segmento)', fontsize=12)
+plt.ylabel('Teor Alcoólico', fontsize=12)
 
-# 4. Exibir
-plt.savefig('mapaBarra.png', dpi=300, bbox_inches='tight')
+# 4. SALVAR O GRÁFICO (para você baixar)
+plt.savefig('grafico_vinhos_final.png', dpi=300, bbox_inches='tight')
+print("Sucesso! O arquivo 'grafico_vinhos_final.png' foi criado na sua pasta.")
 
-print("Gráfico salvo com sucesso como 'meu_grafico_vinhos.png'!")
-
-# 3. Mostrar na tela (opcional)
 plt.show()
-

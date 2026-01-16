@@ -1,14 +1,17 @@
 import pandas as pd
-import seaborn as sns
-import matplotlib.pyplot as plt     
-df = pd.read_csv('wine.csv')
-sns.set_theme(style="whitegrid")
-plt.figure(figsize=(10, 6))
-sns.scatterplot(data=df, x='Alcohol', y='Color_intensity', hue='Alcohol', palette='viridis')
+import plotly.express as px    
 
-plt.title('Relação entre teor alcoólico e intensidade de cor', fontsize=15)
-plt.xlabel('Teor Alcoólico', fontsize=12)
-plt.ylabel('Intensidade da Cor', fontsize=12)
-plt.show()
+dados_vinho = pd.read_csv('wine.csv', encoding='utf-8')
+
+vis = px.parallel_coordinates(dados_vinho, color='Color_intensity',
+    dimensions=['Alcohol', 'Malic_acid', 'Ash', 'Alcalinity_ash', 'Flavanoids', 'Nonflavanoid_phenols'],
+    labels={
+        'Alcohol': 'Álcool',
+        'Malic_acid': 'Ácido Málico',
+        'Ash': 'Cinzas',
+        'Alcalinity_ash': 'Alcalinidade',
+        'Flavanoids': 'Flavonoides',
+        'Nonflavanoid_phenols': 'Fenóis Não Flavonoides'},color_continuous_scale= px.colors.sequential.Viridis, range_color=[2,10])
+vis.show()
 
 

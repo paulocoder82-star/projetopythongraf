@@ -2,6 +2,7 @@ import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 
+
 # 1. Carregar os dados
 df = pd.read_csv('wine.csv')
 
